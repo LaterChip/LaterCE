@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="LaterCE.Pages.VersionsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:LaterCE.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <Grid Padding="28,16,28,20" RowSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Spacing="12">
+            <TextBlock Text="版本管理" Style="{StaticResource PageTitleStyle}" />
+            <TextBlock x:Name="TotalText" Style="{StaticResource CaptionStyle}" VerticalAlignment="Bottom"
+                       Margin="0,0,0,5" Text="加载中…" />
+        </StackPanel>
+
+        <Pivot x:Name="MainPivot" Grid.Row="1" Margin="0,4,0,0">
+
+            <!--  下载新版本  -->
+            <PivotItem Header="下载新版本">
+                <Grid Padding="0,12,0,0" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox x:Name="CategoryCombo" Width="168" VerticalAlignment="Center"
+                                  SelectionChanged="Category_Changed">
+                            <ComboBoxItem Content="正式版" Tag="release" />
+                            <ComboBoxItem Content="全部版本" Tag="all" />
+                            <ComboBoxItem Content="快照" Tag="snapshot" />
+                            <ComboBoxItem Content="愚人节版本" Tag="fools" />
+                            <ComboBoxItem Content="远古版本" Tag="old" />
+                        </ComboBox>
+
+                        <AutoSuggestBox x:Name="SearchBox" Grid.Column="1" Width="260"
+                                        PlaceholderText="搜索版本号，例如 1.20.1"
+                                        QueryIcon="Find" TextChanged="Search_Changed" />
+
+                        <TextBlock x:Name="FilterCountText" Grid.Column="2" VerticalAlignment="Center"
+                                   Margin="8,0,0,0" Style="{StaticResource CaptionStyle}" />
+
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8">
+                            <ProgressRing x:Name="LoadingRing" Width="20" Height="20" IsActive="False"
+                                          Foreground="{StaticResource AccentBrush}" />
+                            <Button Content="刷新清单" Style="{StaticResource GhostButtonStyle}"
+                                    Click="RefreshManifest_Click" />
+                        </StackPanel>
+                    </Grid>
+
+                    <ListView x:Name="VersionList" Grid.Row="1" SelectionMode="None"
+                              VerticalAlignment="Stretch">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0,0,0,6" />
+                                <Setter Property="CornerRadius" Value="8" />
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:VersionListItem">
+                                <Grid Padding="14,11" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Width="38" Height="38" CornerRadius="8" Background="#FFE6F5EE">
+                                        <FontIcon Glyph="&#xE7B8;" FontSize="15"
+                                                  Foreground="{StaticResource AccentBrush}" />
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind Id}" FontSize="14" FontWeight="SemiBold" />
+                                        <TextBlock Text="{x:Bind SubText}" Style="{StaticResource CaptionStyle}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+
+                                    <Border Grid.Column="2" Background="#1A0EA472" CornerRadius="4"
+                                            Padding="8,3" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind Badge}" FontSize="11"
+                                                   Foreground="{StaticResource AccentBrush}" />
+                                    </Border>
+
+                                    <Button Grid.Column="3" Content="{x:Bind ActionText}"
+                                            Style="{StaticResource GhostButtonStyle}" Padding="12,5"
+                                            FontSize="12" VerticalAlignment="Center" Click="Download_Click" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </PivotItem>
+
+            <!--  已安装  -->
+            <PivotItem Header="已安装">
+                <Grid Padding="0,12,0,0" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock x:Name="InstalledCountText" Style="{StaticResource CaptionStyle}"
+                                   VerticalAlignment="Center" Text="尚未安装任何版本" />
+                        <Button Content="重新扫描" Style="{StaticResource GhostButtonStyle}" Padding="12,5"
+                                FontSize="12" Click="Rescan_Click" />
+                    </StackPanel>
+
+                    <ListView x:Name="InstalledList" Grid.Row="1" SelectionMode="None">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0,0,0,6" />
+                                <Setter Property="CornerRadius" Value="8" />
+                                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:InstalledVersion">
+                                <Grid Padding="14,11" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Width="38" Height="38" CornerRadius="8" Background="#FFE6F5EE">
+                                        <FontIcon Glyph="&#xE8B7;" FontSize="15"
+                                                  Foreground="{StaticResource AccentBrush}" />
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind Id}" FontSize="14" FontWeight="SemiBold" />
+                                        <TextBlock Text="{x:Bind SubText}" Style="{StaticResource CaptionStyle}" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8"
+                                                VerticalAlignment="Center">
+                                        <Button Content="设为当前" Style="{StaticResource GhostButtonStyle}"
+                                                Padding="12,5" FontSize="12" Click="SetCurrent_Click" />
+                                        <Button Content="打开目录" Style="{StaticResource GhostButtonStyle}"
+                                                Padding="12,5" FontSize="12" Click="OpenFolder_Click" />
+                                        <Button Content="删除" Style="{StaticResource GhostButtonStyle}"
+                                                Padding="12,5" FontSize="12" Click="Delete_Click" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </PivotItem>
+        </Pivot>
+
+        <!--  下载进度  -->
+        <Border x:Name="ProgressPanel" Grid.Row="2" Style="{StaticResource CardStyle}"
+                Padding="16,12" Visibility="Collapsed">
+            <StackPanel Spacing="8">
+                <TextBlock x:Name="ProgressText" FontSize="13" Text="准备中…" TextTrimming="CharacterEllipsis" />
+                <ProgressBar x:Name="InstallProgressBar" Minimum="0" Maximum="100" Height="6"
+                             Foreground="{StaticResource AccentBrush}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

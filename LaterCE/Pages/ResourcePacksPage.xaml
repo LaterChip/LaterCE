@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="LaterCE.Pages.ResourcePacksPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:pages="using:LaterCE.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <Grid Padding="28,16,28,20" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Spacing="12">
+            <TextBlock Text="资源包" Style="{StaticResource PageTitleStyle}" />
+            <Border Background="#1A0EA472" CornerRadius="4" Padding="8,3" VerticalAlignment="Bottom"
+                    Margin="0,0,0,6">
+                <TextBlock x:Name="TargetVersionText" Text="未选择版本" FontSize="11"
+                           Foreground="{StaticResource AccentBrush}" />
+            </Border>
+        </StackPanel>
+
+        <Grid Grid.Row="1" ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <ComboBox x:Name="VersionCombo" Width="190" VerticalAlignment="Center"
+                      SelectionChanged="Version_Changed" />
+
+            <AutoSuggestBox x:Name="SearchBox" Grid.Column="1" PlaceholderText="搜索资源包，例如 faithful、bdcraft"
+                            QueryIcon="Find" QuerySubmitted="Search_QuerySubmitted" />
+
+            <Button Grid.Column="2" Content="刷新热门" Style="{StaticResource GhostButtonStyle}"
+                    Click="Refresh_Click" />
+
+            <Button Grid.Column="3" Content="打开 resourcepacks 目录" Style="{StaticResource GhostButtonStyle}"
+                    Click="OpenFolder_Click" />
+        </Grid>
+
+        <ListView x:Name="ResultList" Grid.Row="2" SelectionMode="None">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="0,0,0,6" />
+                    <Setter Property="CornerRadius" Value="8" />
+                    <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="pages:MarketItem">
+                    <Grid Padding="14,11" ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Width="44" Height="44" CornerRadius="8" Background="#FFE6F5EE">
+                            <Grid>
+                                <!--  占位字形：图标为空或加载失败时显示  -->
+                                <FontIcon Glyph="&#xE8F1;" FontSize="18" Foreground="#FF9AA7B0"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <!--  惰性加载的 ImageSource 图标，加载成功后覆盖显示  -->
+                                <Image Source="{x:Bind Icon, Mode=OneWay}" Stretch="UniformToFill" />
+                            </Grid>
+                        </Border>
+
+                        <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="{x:Bind Title}" FontSize="14" FontWeight="SemiBold" />
+                            <TextBlock Text="{x:Bind Description}" Style="{StaticResource CaptionStyle}"
+                                       TextTrimming="CharacterEllipsis" MaxLines="2" TextWrapping="Wrap" />
+                            <TextBlock Text="{x:Bind Meta}" FontSize="11"
+                                       Foreground="{StaticResource SubtleTextBrush}" />
+                        </StackPanel>
+
+                        <Button Grid.Column="2" Content="下载" Style="{StaticResource PrimaryButtonStyle}"
+                                Padding="16,6" FontSize="12" VerticalAlignment="Center" Click="Download_Click" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Border Grid.Row="3" Style="{StaticResource CardStyle}" Padding="16,12">
+            <StackPanel Spacing="8">
+                <Grid>
+                    <TextBlock x:Name="StatusText" FontSize="13" Text="正在加载热门资源包…" />
+                    <ProgressRing x:Name="StatusRing" Width="18" Height="18" IsActive="False"
+                                  HorizontalAlignment="Right" Foreground="{StaticResource AccentBrush}" />
+                </Grid>
+                <ProgressBar x:Name="StatusBar" Minimum="0" Maximum="100" Height="4" Value="0"
+                             Foreground="{StaticResource AccentBrush}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

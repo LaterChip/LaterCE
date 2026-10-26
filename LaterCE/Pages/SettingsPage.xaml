@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="LaterCE.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <ScrollViewer Padding="28,16,28,28" VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="920" Spacing="14">
+
+            <Grid>
+                <TextBlock Text="设置" Style="{StaticResource PageTitleStyle}" />
+                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+                    <Button Content="恢复默认" Style="{StaticResource GhostButtonStyle}" Click="Reset_Click" />
+                    <Button Content="保存设置" Style="{StaticResource PrimaryButtonStyle}" Click="Save_Click" />
+                </StackPanel>
+            </Grid>
+
+            <!--  游戏目录  -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="游戏目录" Style="{StaticResource SectionTitleStyle}" />
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="GameDirBox" PlaceholderText="%APPDATA%\.minecraft" />
+                        <Button Grid.Column="1" Content="浏览…" Style="{StaticResource GhostButtonStyle}"
+                                Click="Browse_Click" />
+                        <Button Grid.Column="2" Content="打开" Style="{StaticResource GhostButtonStyle}"
+                                Click="OpenGameDir_Click" />
+                    </Grid>
+                    <TextBlock Style="{StaticResource CaptionStyle}" TextWrapping="Wrap"
+                               Text="版本、资源与存档都存放在该目录，默认与官方启动器共用 .minecraft。" />
+                </StackPanel>
+            </Border>
+
+            <!--  Java  -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Java 运行时" Style="{StaticResource SectionTitleStyle}" />
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="JavaCombo" HorizontalAlignment="Stretch" />
+                        <Button Grid.Column="1" Content="重新检测" Style="{StaticResource GhostButtonStyle}"
+                                Click="ScanJava_Click" />
+                        <Button Grid.Column="2" Content="一键安装 JRE 21" Style="{StaticResource PrimaryButtonStyle}"
+                                Click="InstallJava_Click" />
+                    </Grid>
+                    <ProgressBar x:Name="JavaProgress" Height="4" Minimum="0" Maximum="1" Value="0"
+                                 Foreground="{StaticResource AccentBrush}" />
+                    <TextBlock x:Name="JavaStatus" Style="{StaticResource CaptionStyle}" TextWrapping="Wrap"
+                               Text="未检测到 Java" />
+                </StackPanel>
+            </Border>
+
+            <!--  内存与参数  -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="内存与启动参数" Style="{StaticResource SectionTitleStyle}" />
+
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <NumberBox x:Name="MinMemoryBox" Header="最小内存 (MB)" Minimum="512" Maximum="65536"
+                                   SmallChange="256" LargeChange="1024" SpinButtonPlacementMode="Inline" />
+                        <NumberBox x:Name="MaxMemoryBox" Grid.Column="1" Header="最大内存 (MB)" Minimum="512"
+                                   Maximum="65536" SmallChange="512" LargeChange="2048"
+                                   SpinButtonPlacementMode="Inline" />
+                    </Grid>
+
+                    <TextBox x:Name="JvmArgsBox" Header="附加 JVM 参数"
+                             PlaceholderText="-XX:+UseG1GC -Dfile.encoding=UTF-8" />
+                    <TextBox x:Name="GameArgsBox" Header="附加游戏参数"
+                             PlaceholderText="--width 1280 --height 720" />
+                    <CheckBox x:Name="IsolationCheck" Content="开启版本隔离（每个版本独立 mods 与存档）" />
+                </StackPanel>
+            </Border>
+
+            <!--  下载  -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="下载" Style="{StaticResource SectionTitleStyle}" />
+                    <CheckBox x:Name="BmclCheck" Content="使用 BMCLAPI 镜像加速下载（国内推荐）" />
+                    <NumberBox x:Name="ThreadsBox" Header="并发下载线程数" Minimum="1" Maximum="64"
+                               SmallChange="1" LargeChange="4" SpinButtonPlacementMode="Inline"
+                               HorizontalAlignment="Left" Width="240" />
+                </StackPanel>
+            </Border>
+
+            <!--  微软正版登录  -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="微软正版登录" Style="{StaticResource SectionTitleStyle}" />
+                    <TextBox x:Name="MsClientIdBox" Header="Microsoft 应用 Client ID"
+                             PlaceholderText="Azure 应用注册里的「应用程序(客户端) ID」" />
+                    <TextBlock Style="{StaticResource CaptionStyle}" TextWrapping="Wrap"
+                               Text="微软已停用旧版公共 Client ID（00000000402b5328），正版登录必须使用你自行注册的 Azure 应用。步骤：portal.azure.com → Microsoft Entra ID → 应用注册 → 新注册 → 受支持的账户类型选「仅个人 Microsoft 账户」→ 注册后进入「身份验证」→ 把「允许公共客户端流」设为「是」→ 复制应用程序(客户端) ID 填到上方。" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="打开 Azure 应用注册" Style="{StaticResource GhostButtonStyle}"
+                                Click="OpenAzureApps_Click" />
+                        <Button Content="打开微软账号授权页" Style="{StaticResource GhostButtonStyle}"
+                                Click="OpenMsLink_Click" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!--  其他  -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="API 与来源" Style="{StaticResource SectionTitleStyle}" />
+                    <TextBox x:Name="CfKeyBox" Header="CurseForge API Key"
+                             PlaceholderText="在 console.curseforge.com 免费申请" />
+                    <TextBlock Style="{StaticResource CaptionStyle}" TextWrapping="Wrap"
+                               Text="Modrinth 无需配置即可使用；CurseForge 需要个人 API Key。" />
+                </StackPanel>
+            </Border>
+
+            <!--  关于  -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="关于" Style="{StaticResource SectionTitleStyle}" />
+                    <TextBlock x:Name="AboutText" Style="{StaticResource CaptionStyle}" TextWrapping="Wrap"
+                               Text="Later CE" />
+                    <TextBlock Style="{StaticResource CaptionStyle}" TextWrapping="Wrap"
+                               Text="本项目为开源的非官方启动器，与 Mojang / Microsoft 无关联。请使用正版账号登录。" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
