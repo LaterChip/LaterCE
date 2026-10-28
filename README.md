@@ -1,3 +1,14 @@
+---
+AIGC:
+    Label: "1"
+    ContentProducer: 001191440300708461136T1XGW3
+    ProduceID: b24dc39192336bf7b807e81b52c48f4e_96402509d27e11f1a301525400cd780f
+    ReservedCode1: vN1QoZHTXOJQLMRJ4/yrSFCUi9Uppt4p7GMQwKW1ZxoPwca4UMrx2y6TgsMAZ3jUdbKKm+NdDX5WfSzcem6KWEUS0xaFMoi9xk+jKMppUsMCrPHSbsPwMvusV+Yzv9HZB0GhlPnzaoIwiknh5quP+R4U6ksnHvqGWKsUT0rdIqr6bB10cGzRt0c7G3I=
+    ContentPropagator: 001191440300708461136T1XGW3
+    PropagateID: b24dc39192336bf7b807e81b52c48f4e_96402509d27e11f1a301525400cd780f
+    ReservedCode2: vN1QoZHTXOJQLMRJ4/yrSFCUi9Uppt4p7GMQwKW1ZxoPwca4UMrx2y6TgsMAZ3jUdbKKm+NdDX5WfSzcem6KWEUS0xaFMoi9xk+jKMppUsMCrPHSbsPwMvusV+Yzv9HZB0GhlPnzaoIwiknh5quP+R4U6ksnHvqGWKsUT0rdIqr6bB10cGzRt0c7G3I=
+---
+
 # Later CE
 
 Later CE 是一个面向 Windows 的 **Minecraft Java 版启动器**，使用 **WinUI 3 / .NET 8 / Windows App SDK 1.8** 开发，界面采用浅色主题，支持版本与加载器安装、微软正版 / LittleSkin / 离线多账号登录、Modrinth 与 CurseForge 内容下载，以及 Java 运行时的自动检测与一键安装。
@@ -48,7 +59,7 @@ Later CE 是一个面向 Windows 的 **Minecraft Java 版启动器**，使用 **
 >
 > 上述文件目前尚不存在，属于后续待补充内容。
 
-主窗口左侧导航包含：**主页、版本管理、模组市场、资源包、整合包、账户、设置**；左下角固定显示当前账号与「启动游戏」按钮，窗口顶部为自绘标题栏（应用图标 + 名称 + 副标题）。
+主窗口左侧导航包含：**主页、版本管理、模组市场、资源包、光影包、整合包、账户、设置**；左下角固定显示当前账号与「启动游戏」按钮，窗口顶部为自绘标题栏（应用图标 + 名称 + 副标题）。
 
 ---
 
@@ -97,12 +108,13 @@ Later CE 是一个面向 Windows 的 **Minecraft Java 版启动器**，使用 **
 | 模组（mod） | Modrinth（无需配置）；CurseForge（需 API Key） | 当前实例的 `mods` |
 | 资源包（resourcepack） | Modrinth | 当前实例的 `resourcepacks` |
 | 整合包（modpack，`.mrpack`） | Modrinth | 按整合包清单安装，含 `overrides` / `client-overrides` 覆盖 |
-| 光影包（shader） | 底层安装器支持写入 `shaderpacks` | **当前版本尚无独立光影市场页面**，可将光影包手动放入 `shaderpacks` 目录 |
+| 光影包（shader） | Modrinth | 当前实例的 `shaderpacks`（支持启用 / 禁用 / 删除管理） |
 
 - 「模组市场」打开即加载热门内容，支持关键词搜索、加载器筛选、游戏版本筛选，并记住上次选择的加载器。
 - CurseForge 需要在「设置 → API 与来源」中填写个人 API Key（`console.curseforge.com` 免费申请）；未填写时会提示并可切回 Modrinth。
 - 安装前会要求选择目标游戏版本，文件统一写入该版本的实例目录，避免写入不存在的目录。
 - 市场图标采用惰性加载，加载失败时保留占位图标，不会导致页面崩溃。
+- 「光影包」页面分两个页签：**光影市场**支持按游戏版本 / 加载器（Iris、OptiFine、Canvas、Vanilla）筛选与关键词搜索，下载时自动选择或手动指定光影版本，并在列表中提示「获取版本 / 下载中 / 已安装 / 失败」状态；**已安装光影**列出实例 `shaderpacks` 内的 `.zip` / `.jar` 与文件夹，支持按名称筛选、启用 / 禁用（通过 `.disabled` 后缀）、删除（移入回收站）与一键全部启用。
 
 ### Java 运行时
 
@@ -130,7 +142,7 @@ Later CE 是一个面向 Windows 的 **Minecraft Java 版启动器**，使用 **
 
 - **浅色主题**：`Application RequestedTheme="Light"`，自定义浅灰背景、白色卡片、绿色强调色（`#0EA472`）与渐变按钮样式。
 - 自绘标题栏，显示应用图标与应用名称。
-- 主页展示已安装版本数、检测到的 Java 数、当前版本模组数，以及实时运行日志。
+- 主页展示已安装版本数、检测到的 Java 数、当前版本模组数与光影数，以及实时运行日志。
 - 采用非打包（unpackaged）方式运行，无需 MSIX 安装包。
 
 ---
@@ -145,7 +157,7 @@ Later CE 是一个面向 Windows 的 **Minecraft Java 版启动器**，使用 **
 | 打包方式 | 非打包（`WindowsPackageType=None`，`EnableMsixTooling=false`） |
 | 目标平台 | x64（`win-x64`，`RuntimeIdentifier=win-x64`） |
 | 语言 | C#（`LangVersion=latest`，启用可空引用类型） |
-| 版本号 | 1.0.0.0 |
+| 版本号 | 2.0.0.0 |
 
 ---
 
@@ -268,6 +280,7 @@ LaterCE/
    │  ├─ VersionsPage.xaml(.cs)  版本管理（下载 / 已安装）
    │  ├─ ModsPage.xaml(.cs)      模组市场（Modrinth / CurseForge）
    │  ├─ ResourcePacksPage.xaml(.cs)  资源包市场（Modrinth）
+   │  ├─ ShaderPacksPage.xaml(.cs)  光影市场与已安装光影管理（Modrinth）
    │  ├─ ModPacksPage.xaml(.cs)  整合包市场（Modrinth）
    │  ├─ MarketSupport.cs        市场公共逻辑（基础版本解析、图标批量加载）
    │  ├─ AccountsPage.xaml(.cs)  账户（微软 / LittleSkin / 离线）
@@ -367,6 +380,7 @@ CurseForge 必须填写个人 API Key：`console.curseforge.com` 免费申请后
 
 提交问题时请附上：
 
-- Later CE 版本（当前为 1.0.0）
+- Later CE 版本（当前为 2.0.0）
 - Windows 版本
 - 日志文件 `%APPDATA%\LaterCE\logs\laterce-YYYYMMDD.log` 的相关片段（请先移除账号令牌等敏感信息）
+*（内容由AI生成，仅供参考）*

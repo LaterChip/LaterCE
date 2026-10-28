@@ -110,6 +110,7 @@ public sealed partial class MainWindow : Window
             "mods" => typeof(ModsPage),
             "modpacks" => typeof(ModPacksPage),
             "resourcepacks" => typeof(ResourcePacksPage),
+            "shaderpacks" => typeof(ShaderPacksPage),
             "accounts" => typeof(AccountsPage),
             "settings" => typeof(SettingsPage),
             _ => typeof(HomePage)

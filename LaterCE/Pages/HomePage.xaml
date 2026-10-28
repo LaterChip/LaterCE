@@ -78,6 +78,15 @@
                                    TextTrimming="CharacterEllipsis" />
                     </StackPanel>
                 </Border>
+
+                <Border Grid.Column="3" Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="当前版本光影" Style="{StaticResource CaptionStyle}" />
+                        <TextBlock x:Name="ShaderCountText" Text="0" FontSize="28" FontWeight="SemiBold" />
+                        <TextBlock x:Name="ShaderHintText" Text="尚未安装光影" Style="{StaticResource CaptionStyle}"
+                                   TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </Border>
             </Grid>
 
             <!--  运行日志  -->

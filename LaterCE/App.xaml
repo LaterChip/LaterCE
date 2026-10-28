@@ -22,6 +22,7 @@
             <SolidColorBrush x:Key="AppBackgroundBrush" Color="{StaticResource AppBackgroundColor}" />
             <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}" />
             <SolidColorBrush x:Key="SurfaceHoverBrush" Color="{StaticResource SurfaceHoverColor}" />
+            <SolidColorBrush x:Key="IconPlaceholderBrush" Color="{StaticResource SurfaceHoverColor}" />
             <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
             <SolidColorBrush x:Key="SubtleTextBrush" Color="#FF5B6676" />
             <SolidColorBrush x:Key="MutedTextBrush" Color="#FF8A94A3" />
@@ -72,6 +73,54 @@
                 <Setter Property="Padding" Value="20,10" />
                 <Setter Property="CornerRadius" Value="8" />
                 <Setter Property="Background" Value="{StaticResource AccentGradientBrush}" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="Root" Background="{TemplateBinding Background}"
+                                  CornerRadius="{TemplateBinding CornerRadius}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="Root"
+                                                                 Storyboard.TargetProperty="Opacity"
+                                                                 To="0.88" Duration="0:0:0.12" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="Root"
+                                                                 Storyboard.TargetProperty="Opacity"
+                                                                 To="0.7" Duration="0:0:0.08" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="Root"
+                                                                 Storyboard.TargetProperty="Opacity"
+                                                                 To="0.35" Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  Padding="{TemplateBinding Padding}"
+                                                  Content="{TemplateBinding Content}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+                <Setter Property="Foreground" Value="#FFFFFFFF" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="Padding" Value="14,8" />
+                <Setter Property="CornerRadius" Value="8" />
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="Template">
                     <Setter.Value>

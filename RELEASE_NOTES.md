@@ -1,4 +1,56 @@
+---
+AIGC:
+    Label: "1"
+    ContentProducer: 001191440300708461136T1XGW3
+    ProduceID: b24dc39192336bf7b807e81b52c48f4e_97816151d27e11f18068525400de85a5
+    ReservedCode1: onS1w3YI0GBxQGruN5Ruy9BtsoNu1NGCxMKIX7WDL1hbUo7ZF6LfXjYUGI5OgYHE1cuMIBnNR5QVVvFVev2rH+ammu8N4AcsWa3z3RfcOEmjSOaXGcmnncJGxpmLr4YO0JEgO/s1opcCIqrcGwbsoz6f5eSuX4h2YoBwphuLdeOpv6ALztXU7nWBpGE=
+    ContentPropagator: 001191440300708461136T1XGW3
+    PropagateID: b24dc39192336bf7b807e81b52c48f4e_97816151d27e11f18068525400de85a5
+    ReservedCode2: onS1w3YI0GBxQGruN5Ruy9BtsoNu1NGCxMKIX7WDL1hbUo7ZF6LfXjYUGI5OgYHE1cuMIBnNR5QVVvFVev2rH+ammu8N4AcsWa3z3RfcOEmjSOaXGcmnncJGxpmLr4YO0JEgO/s1opcCIqrcGwbsoz6f5eSuX4h2YoBwphuLdeOpv6ALztXU7nWBpGE=
+---
+
 # Later CE 更新说明
+
+## v2.0.0 — 光影支持与管理增强
+
+**发布日期**：2026-10-28
+**适用平台**：Windows 10 1809+ / Windows 11，x64
+**运行环境**：.NET 8 桌面运行时 + Windows App SDK 1.8 运行时
+
+本次版本补齐了 1.0 版本缺失的**光影（Shader）下载能力**，并把「光影包」提升为独立市场页面，同时新增已安装光影的启用 / 禁用 / 删除管理与若干体验改进。
+
+---
+
+### 新增功能
+
+#### 光影市场（新页面）
+
+- 左侧导航新增「光影包」页签，接入 Modrinth `project_type=shader`，与模组 / 资源包市场共用同一套市场公共逻辑。
+- 打开页面即加载热门光影，支持关键词搜索（如 Complementary、BSL、Sildur）、按**游戏版本**筛选、按**加载器**（Iris / OptiFine / Canvas / Vanilla）筛选。
+- 当前实例对应的游戏版本会出现在版本下拉的首项并标注「当前实例」；指定版本无结果时自动放宽为全部版本，页面不会空白。
+- 下载时按项目 + 游戏版本拉取版本清单，只保留含主文件的版本；仅有一个可用版本时直接下载，多个版本时弹窗选择。
+- 列表项显示下载状态：`获取版本…` / `下载中…` / `已安装` / `失败`，状态栏同步显示搜索结果数量与实际安装路径。
+- 顶部展示当前实例名与 `shaderpacks` 目录真实路径，并提供「打开 shaderpacks 目录」按钮。
+
+#### 已安装光影管理
+
+- 新增「已安装光影」页签，扫描当前实例 `shaderpacks` 目录下的 `.zip` / `.jar` 光影包与光影文件夹，展示启用状态、大小与占用合计。
+- 支持**启用 / 禁用**：禁用时将文件（或文件夹）重命名为 `*.disabled`，游戏不再加载，随时可恢复。
+- 支持**删除**：确认后移入回收站，可还原，不做永久删除。
+- 支持按名称筛选、单项切换、一键「全部启用」与手动刷新。
+
+#### 其它改进
+
+- 主页新增「当前版本光影」统计卡，显示已启用数量与总数 / 已禁用数量，未安装时给出前往「光影包」页面的引导。
+- 版本号升级至 `2.0.0.0`（`AssemblyName`、`Version`、`FileVersion` 同步）。
+- 修复 1.0 版本「光影包只能手动放入目录、没有下载界面」的功能缺口。
+
+### 说明与已知限制
+
+- **光影渲染仍需游戏侧安装对应加载器**：光影本身依赖 Iris / OptiFine 等加载器运行，启动器只负责下载与启停文件，不替代加载器。
+- CurseForge 依旧只提供模组来源，光影市场仅接入 Modrinth。
+
+---
 
 ## v1.0.0 — 首次发布
 
@@ -83,7 +135,7 @@
 
 - **微软正版登录必须自备 Azure 应用 Client ID**：本版本不内置任何 Client ID，未配置时无法使用正版登录（离线账户与 LittleSkin 不受影响）。
 - **整合包安装尚未经过大规模实机验证**：`.mrpack` 解析与覆盖文件复制已实现，但不同整合包（尤其是含自定义启动参数、Forge 版本组合、服务端专属文件）可能存在兼容性问题，建议先在测试目录安装验证。
-- **光影包暂无独立市场页面**：底层安装器支持写入 `shaderpacks`，但界面仅提供模组、资源包、整合包三个市场页面，光影包需手动放入对应目录。
+- ~~**光影包暂无独立市场页面**~~：已在 v2.0.0 中补齐独立光影市场页面与已安装光影管理。
 - **CurseForge 仅支持模组**：资源包与整合包市场目前仅接入 Modrinth；CurseForge 需要在设置中填写个人 API Key，未填写时列表为空。
 - **仅支持 Windows x64**：项目固定 `win-x64`，未提供 arm64 或 32 位构建。
 - **非打包应用**：需预先安装 .NET 8 与 Windows App SDK 1.8 运行时，首次运行不会自动部署运行时。
@@ -106,6 +158,7 @@
 ### 发布说明
 
 - 本版本以**源码形式**发布，仓库地址：<https://github.com/LaterChip/LaterCE>
-- 构建方式见 [README.md](README.md) 的「从源码构建」章节，当前版本号 `1.0.0`。
+- 构建方式见 [README.md](README.md) 的「从源码构建」章节，当前版本号 `2.0.0`。
 - 本版本**未提供**预编译安装包或下载链接；请勿从非官方渠道获取可执行文件。
 - 反馈问题请提交至：<https://github.com/LaterChip/LaterCE/issues>
+*（内容由AI生成，仅供参考）*

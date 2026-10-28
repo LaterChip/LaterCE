@@ -85,18 +85,8 @@ public sealed partial class HomePage : Page
 
             UpdateHeroSubtitle(selectedId);
 
-            // 模组统计
-            if (!string.IsNullOrEmpty(selectedId))
-            {
-                var (mods, packs, saves) = ModManager.CountInstalled(selectedId);
-                ModCountText.Text = mods.ToString();
-                ModHintText.Text = $"资源包 {packs} · 存档 {saves}";
-            }
-            else
-            {
-                ModCountText.Text = "0";
-                ModHintText.Text = "未选择版本";
-            }
+            // 模组 / 光影统计
+            UpdateContentStats(selectedId);
 
             await Task.CompletedTask;
         }
@@ -128,11 +118,31 @@ public sealed partial class HomePage : Page
         ConfigService.Current.SelectedVersion = version.Id;
         ConfigService.Save();
         UpdateHeroSubtitle(version.Id);
+        UpdateContentStats(version.Id);
+        Log.Info($"已选择版本：{version.Id}");
+    }
 
-        var (mods, packs, saves) = ModManager.CountInstalled(version.Id);
+    /// <summary>刷新首页「当前版本模组 / 光影」统计卡</summary>
+    private void UpdateContentStats(string? versionId)
+    {
+        if (string.IsNullOrEmpty(versionId))
+        {
+            ModCountText.Text = "0";
+            ModHintText.Text = "未选择版本";
+            ShaderCountText.Text = "0";
+            ShaderHintText.Text = "未选择版本";
+            return;
+        }
+
+        var (mods, packs, saves) = ModManager.CountInstalled(versionId);
         ModCountText.Text = mods.ToString();
         ModHintText.Text = $"资源包 {packs} · 存档 {saves}";
-        Log.Info($"已选择版本：{version.Id}");
+
+        var (shaderTotal, shaderEnabled) = ModManager.CountShaderPacks(versionId);
+        ShaderCountText.Text = shaderEnabled.ToString();
+        ShaderHintText.Text = shaderTotal == 0
+            ? "尚未安装光影，可到「光影包」页下载"
+            : $"共 {shaderTotal} 个 · 已禁用 {shaderTotal - shaderEnabled} 个";
     }
 
     private async void Launch_Click(object sender, RoutedEventArgs e)

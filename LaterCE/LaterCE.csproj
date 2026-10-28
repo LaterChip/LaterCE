@@ -20,8 +20,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <ApplicationId>LaterCE</ApplicationId>
-    <Version>1.0.0.0</Version>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>2.0.0.0</Version>
+    <FileVersion>2.0.0.0</FileVersion>
     <Company>LaterChip</Company>
     <Product>LaterCE</Product>
     <Description>LaterCE - 我的世界 Java 版启动器 (WinUI 3)</Description>

@@ -141,6 +141,36 @@ public class ModManager
         }
     }
 
+    /// <summary>统计实例已安装的光影包（total 含已禁用，enabled 为实际启用数）</summary>
+    public static (int total, int enabled) CountShaderPacks(string versionId)
+    {
+        var dir = ShaderPacksDir(versionId);
+        if (!Directory.Exists(dir)) return (0, 0);
+
+        static bool IsPack(string name)
+        {
+            var core = name.EndsWith(".disabled", StringComparison.OrdinalIgnoreCase)
+                ? name[..^".disabled".Length]
+                : name;
+            return core.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) ||
+                   core.EndsWith(".jar", StringComparison.OrdinalIgnoreCase);
+        }
+
+        static bool IsEnabled(string name)
+            => !name.EndsWith(".disabled", StringComparison.OrdinalIgnoreCase);
+
+        var files = Directory.GetFiles(dir)
+            .Where(f => IsPack(Path.GetFileName(f)))
+            .ToList();
+        var folders = Directory.GetDirectories(dir);
+
+        var total = files.Count + folders.Length;
+        var enabled = files.Count(f => IsEnabled(Path.GetFileName(f))) +
+                      folders.Count(d => IsEnabled(Path.GetFileName(d)));
+
+        return (total, enabled);
+    }
+
     /// <summary>统计实例已安装的内容数量</summary>
     public static (int mods, int resourcepacks, int saves) CountInstalled(string versionId)
     {
