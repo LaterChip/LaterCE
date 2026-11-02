@@ -1,6 +1,11 @@
 
 # Later CE
 
+<p align="center">
+  <a href="https://space.bilibili.com/3546952564214479" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/动态-bilibili-00A4DB?style=for-the-badge&labelColor=444444&logo=bilibili" alt="Bilibili | LaterChip" height="28"/></a>
+  <a href="https://trendshift.io/repositories/322373?utm_source=trendshift-badge&utm_medium=badge&utm_campaign=badge-trendshift-322373" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Trendshift-LaterCE-0b0b0f?style=for-the-badge&labelColor=444444&logo=github&logoColor=white" alt="LaterChip/LaterCE | Trendshift" height="28"/></a>
+</p>
+
 Later CE 是一个面向 Windows 的 **Minecraft Java 版启动器**，使用 **WinUI 3 / .NET 8 / Windows App SDK 1.8** 开发，界面采用浅色主题，支持版本与加载器安装、微软正版 / LittleSkin / 离线多账号登录、Modrinth 与 CurseForge 内容下载，以及 Java 运行时的自动检测与一键安装。
 
 仓库地址：<https://github.com/LaterChip/LaterCE>
